@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "jisp_sha3",
+    "jisp_sha3_gui",
+]
