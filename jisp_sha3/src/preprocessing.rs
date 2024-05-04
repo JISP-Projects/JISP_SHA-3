@@ -19,6 +19,22 @@ pub fn be_preprocessing(s: &str) -> Vec<[u64; 25]> {
     padding(&bytes, &vec![true,false])
 }
 
+pub fn split_bytes(v:&Vec<u64>) -> Vec<u8> {
+    let mut res = Vec::new();
+    for word in v {
+        let mut word = *word;
+        let mut byte_list = [0u8;8];
+        for i in 0..8 {
+            byte_list[7 - i] = (word & 0xff) as u8;
+            word >>= 8;
+        }
+        for i in byte_list {
+            res.push(i);
+        }
+    }
+    return res;
+}
+
 /// Pads a string of bytes and splits it in the specified block-size.
 /// 
 /// # Panics
