@@ -119,38 +119,3 @@ fn suffix_to_u8(suffix:&Vec<bool>) -> u8 {
     return res << 1;
 }
 
-struct Sheet([u64;5]);
-struct State([Sheet;5]);
-
-impl Index<usize> for Sheet {
-    type Output = u64;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        let Sheet(data) = self;
-        &data[index]
-    }
-}
-
-impl IndexMut<usize> for Sheet {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        let Sheet(data) = self;
-        &mut data[index]
-    }
-}
-
-impl Index<usize> for State {
-    type Output = Sheet;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        let State(data) = self;
-        &data[index]
-    }
-}
-
-impl IndexMut<usize> for State {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        let State(data) = self;
-        &mut data[index]
-    }
-}
-
