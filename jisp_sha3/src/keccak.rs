@@ -17,7 +17,7 @@ pub fn pi(state:State) -> State {
 }
 
 pub fn chi(state:State) -> State {
-
+    todo!();
 }
 
 pub fn iota(state:State, round_index:u32) -> State {

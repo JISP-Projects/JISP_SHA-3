@@ -1,4 +1,4 @@
-use std::ops::{Index, IndexMut};
+
 
 pub fn string_to_encoding(s: &str) -> Vec<u8> {
     s.as_bytes().into()
@@ -29,7 +29,7 @@ pub fn be_preprocessing(s: &str) -> Vec<[u64; 25]> {
 /// use jisp_sha3::preprocessing::padding;
 /// 
 /// let m = vec![0;7];
-/// let suffix = vec![false, true]
+/// let suffix = vec![false, true];
 /// 
 /// let res = padding::<1>(&m, &suffix)[0][0];
 /// let expected:u64 = 0b0110_0001;
