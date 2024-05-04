@@ -1,4 +1,4 @@
-pub use crate::sponge::State;
+pub use crate::state::State;
 
 pub fn round(state:State, round_index:u32 ) -> State {
     todo!();
