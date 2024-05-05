@@ -21,14 +21,15 @@ use std::{ops::{Index, IndexMut, BitXor, Add, Sub, Mul}, iter};
 /// ```
 pub fn to_state(v:&Vec<u64>) -> State {
     let mut res = State::default();
-    let mut x = X::from(0);
-    let mut y = Y::from(0);
+    let mut x = 0;
+    let mut y = 0;
 
     for word in v {
         res[x][y] = Lane(*word);
-        x = x +1;
-        if x.0 == 0 {
+        x = x + 1;
+        if x >= 5 {
             y = y + 1;
+            x = 0;
         }
     }
 
@@ -53,9 +54,15 @@ pub fn to_state(v:&Vec<u64>) -> State {
 pub fn from_state(state:&State) -> [u64;25] {
     let mut res = [0;25];
 
+    for x in 0..5 {
+        for y in 0..5 {
+            let i = (x + y*5) as usize;
+            res[i] = state[x][y].0;
+        }
+    }
+
     for (x,y,_) in State_iter::xy() {
-        let i = x.size() + y.size()*5;
-        res[i] = state[x][y].0;
+        
     }
     return res;
 }
@@ -214,51 +221,51 @@ impl<const MODULUS:usize> Mul<usize> for Coord<MODULUS> {
 
 impl Lane {
 
-    pub fn get(&self, index:Z) -> u8 {
+    pub fn get(&self, index:i64) -> u8 {
         let num = self.0;
-        let res = (num >> (63 - index.0)) % 2;
+        let res = (num >> (63 - index.md(64))) % 2;
         return res as u8;
     }
 
-    pub fn set(&mut self, index:Z, value:u8) {
+    pub fn set(&mut self, index:i64, value:u8) {
         if self.get(index) != value {
 
             let num = &mut self.0;
-            *num = num.bitxor(1 << (63 - index.0));
+            *num = num.bitxor(1 << (63 - index.md(64)));
         }
     }
 }
 
 
-impl Index<Y> for Sheet {
+impl Index<i64> for Sheet {
     type Output = Lane;
 
-    fn index(&self, index: Y) -> &Self::Output {
+    fn index(&self, index: i64) -> &Self::Output {
         let Sheet(data) = self;
-        &data[index.size()]
+        &data[index.md(5) as usize]
     }
 }
 
-impl IndexMut<Y> for Sheet {
-    fn index_mut(&mut self, index: Y) -> &mut Self::Output {
+impl IndexMut<i64> for Sheet {
+    fn index_mut(&mut self, index: i64) -> &mut Self::Output {
         let Sheet(data) = self;
-        &mut data[index.size()]
+        &mut data[index.md(5) as usize]
     }
 }
 
-impl Index<X> for State {
+impl Index<i64> for State {
     type Output = Sheet;
 
-    fn index(&self, index: X) -> &Self::Output {
+    fn index(&self, index: i64) -> &Self::Output {
         let State(data) = self;
-        &data[index.size()]
+        &data[index.md(5) as usize]
     }
 }
 
-impl IndexMut<X> for State {
-    fn index_mut(&mut self, index: X) -> &mut Self::Output {
+impl IndexMut<i64> for State {
+    fn index_mut(&mut self, index: i64) -> &mut Self::Output {
         let State(data) = self;
-        &mut data[index.size()]
+        &mut data[index.md(5) as usize]
     }
 }
 
@@ -270,17 +277,17 @@ mod tests {
     #[test]
     fn lane_get() {
         let lane = Lane(0b0010);
-        assert_eq!(lane.get(Z::from(63)), 0);
-        assert_eq!(lane.get(Z::from(62)), 1);
+        assert_eq!(lane.get(63), 0);
+        assert_eq!(lane.get(62), 1);
     }
 
     #[test]
     fn lane_set() {
         let mut lane = Lane(1 << 63);
-        lane.set(Z::from(0),1);
+        lane.set(0, 1);
         assert_eq!(lane.0, 1 << 63);
-        lane.set(Z::from(1),1);
-        lane.set(Z::from(0),0);
+        lane.set(1, 1);
+        lane.set(0, 0);
         assert_eq!(lane.0, 1 << 62);
     }
 }
