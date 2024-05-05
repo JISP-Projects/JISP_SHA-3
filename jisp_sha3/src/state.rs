@@ -83,7 +83,7 @@ pub type X = Coord<5>;
 pub type Y = Coord<5>;
 pub type Z = Coord<64>;
 
-trait Modulus {
+pub trait Modulus {
     fn md(&self, m:usize) -> Self;
 }
 
