@@ -1,7 +1,6 @@
 use std::{ops::{Index, IndexMut, BitXor, Add, Sub, Mul}, iter};
 
-//idea: use structs for x, y and z that index the sets and immediately allow for the correct mod operations
-//add iterators for constant x, constant y and constant z.
+//idea: use i64 for indexing and add a mod operation on top of i64;
 
 /// Turns a string of `u64` words into a state matrix
 /// 
@@ -76,6 +75,24 @@ pub struct Coord<const MODULUS:usize>(i64);
 pub type X = Coord<5>;
 pub type Y = Coord<5>;
 pub type Z = Coord<64>;
+
+trait Modulus {
+    fn md(&self, m:usize) -> Self;
+}
+
+impl Modulus for i64 {
+    fn md(&self, m:usize) -> i64 {
+        let m = m as i64;
+        let mut x = *self;
+        while x < 0 {
+            x += m;
+        }
+        while x >= m {
+            x -= m;
+        }
+        return x;
+    }
+}
 
 pub struct State_iter{
     x_mut:bool,

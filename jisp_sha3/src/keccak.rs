@@ -112,7 +112,6 @@ pub fn rc(t:i64) -> u8 {
 
         
         let bit8 = R >>8 & 1;
-        println!("t:{}, bit:{}", t, bit8);
         R ^= bit8;
         R ^= bit8 << 4;
         R ^= bit8 << 5;
