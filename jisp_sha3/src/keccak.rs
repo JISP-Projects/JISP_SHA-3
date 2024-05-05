@@ -14,7 +14,7 @@ pub fn keccak(str_state:[u64;25], rounds:i64) -> [u64;25] {
 }
 
 pub fn round(state:State, round_index:i64 ) -> State {
-    iota(chi(pi(theta(state))),round_index)
+    return iota(chi(pi(rho(theta(state)))),round_index);
 }
 
 
@@ -156,8 +156,17 @@ fn modulus(x:i64, m:u8) -> u8 {
 }
 
 
-fn print_state(s:String, state:&State) {
-    let v = flip_ordering(&split_bytes(&from_state(state).to_vec()));
+pub fn print_state(s:String, state:&State) {
+    print_state_string(s,&from_state(state));
+}
+
+pub fn print_state_string(s:String, state:&[u64]) {
+    print_state_u8(s, &split_bytes(&state.to_vec()));
+    
+}
+
+pub fn print_state_u8(s:String, state:&Vec<u8>) {
+    let v = flip_ordering(state);
     print!("{}: [\n", s);
     for elem in v {
         print!("{:02x?}, ", elem);

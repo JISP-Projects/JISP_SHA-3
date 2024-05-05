@@ -1,4 +1,4 @@
-use std::{ops::{Index, IndexMut, BitXor, Add, Sub, Mul}, iter};
+use std::ops::{Index, IndexMut, BitXor};
 
 //idea: use i64 for indexing and add a mod operation on top of i64;
 
@@ -89,6 +89,7 @@ impl Modulus for i64 {
         return x;
     }
 }
+
 impl Lane {
 
     pub fn get(&self, index:i64) -> u8 {
