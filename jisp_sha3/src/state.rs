@@ -60,10 +60,6 @@ pub fn from_state(state:&State) -> [u64;25] {
             res[i] = state[x][y].0;
         }
     }
-
-    for (x,y,_) in State_iter::xy() {
-        
-    }
     return res;
 }
 
@@ -75,13 +71,6 @@ pub struct Sheet(pub [Lane;5]);
 
 #[derive(Debug, Default, Clone, Copy)]
 pub struct State(pub [Sheet;5]);
-
-#[derive(Debug, Clone, Copy)]
-pub struct Coord<const MODULUS:usize>(i64);
-
-pub type X = Coord<5>;
-pub type Y = Coord<5>;
-pub type Z = Coord<64>;
 
 pub trait Modulus {
     fn md(&self, m:usize) -> Self;
@@ -100,125 +89,6 @@ impl Modulus for i64 {
         return x;
     }
 }
-
-pub struct State_iter{
-    x_mut:bool,
-    y_mut:bool,
-    z_mut:bool,
-    x:X,
-    y:Y,
-    z:Z,
-    done:bool
-}
-
-impl State_iter{
-    pub fn new() -> State_iter {
-        State_iter { 
-            x_mut: true, 
-            y_mut: true, 
-            z_mut: true, 
-            x: X::from(0), 
-            y: Y::from(0), 
-            z: Z::from(0),
-            done : false
-        }
-    }
-    pub fn xz() -> State_iter {
-        State_iter { y_mut: false, ..Self::new() }
-    }
-    pub fn xy() -> State_iter {
-        State_iter { z_mut: false, ..Self::new() }
-    }
-    pub fn yz() -> State_iter {
-        State_iter { x_mut: false, ..Self::new() }
-    }
-}
-
-impl Iterator for State_iter {
-    type Item = (X,Y,Z);
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.done {
-            return None;
-        }
-        let res = (self.x, self.y, self.z);
-        let mut flipnext = true;
-        if self.x_mut {
-            self.x = self.x + 1;
-            flipnext = self.x.0 == 0;
-        }
-        if self.y_mut && flipnext {
-            self.y = self.y + 1;
-            flipnext = self.y.0 == 0;
-        }
-        if self.z_mut && flipnext {
-            self.z = self.z + 1;
-            flipnext = self.z.0 == 0;
-        }
-        self.done = flipnext;
-        return Some(res);
-    }
-}
-
-
-
-
-impl<const MODULUS:usize> Coord::<MODULUS> {
-    pub fn from<T:Into<i64>>(n:T) -> Coord<MODULUS> {
-        let mut x = n.into();
-        let m = MODULUS as i64;
-        while x < 0 {
-            x += m;
-        }
-        while x >= m {
-            x -= m;
-        }
-        return Coord::<MODULUS>(x);
-    }
-
-    pub fn size(&self) -> usize {
-        return self.0 as usize;
-    }
-
-}
-
-impl<const MODULUS:usize> Add for Coord<MODULUS> {
-    type Output = Coord<MODULUS>;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        Self::from(self.0 + rhs.0)
-    }
-} 
-impl<const MODULUS:usize> Add<usize> for Coord<MODULUS> {
-    type Output = Coord<MODULUS>;
-
-    fn add(self, rhs: usize) -> Self::Output {
-        Self::from(self.0 + rhs as i64)
-    }
-} 
-
-impl<const MODULUS:usize> Sub for Coord<MODULUS> {
-    type Output = Coord<MODULUS>;
-    fn sub(self, rhs: Self) -> Self::Output {
-        Self::from(self.0 - rhs.0)
-    }
-} 
-
-impl<const MODULUS:usize> Sub<usize> for Coord<MODULUS> {
-    type Output = Coord<MODULUS>;
-    fn sub(self, rhs: usize) -> Self::Output {
-        Self::from(self.0 - rhs as i64)
-    }
-} 
-
-impl<const MODULUS:usize> Mul<usize> for Coord<MODULUS> {
-    type Output = Coord<MODULUS>;
-
-    fn mul(self, rhs: usize) -> Self::Output {
-        Self::from(self.0 * rhs as i64)
-    }
-}
-
 impl Lane {
 
     pub fn get(&self, index:i64) -> u8 {

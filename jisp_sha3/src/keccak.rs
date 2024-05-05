@@ -1,6 +1,6 @@
 use std::ops::BitXor;
 
-use crate::state::{State, Sheet, X, Y, Z,State_iter, to_state, from_state, Modulus};
+use crate::state::{State, Sheet, to_state, from_state, Modulus};
 use crate::preprocessing::{split_bytes,flip_ordering};
 
 pub fn keccak(str_state:[u64;25], rounds:i64) -> [u64;25] {
