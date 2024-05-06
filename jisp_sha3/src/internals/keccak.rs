@@ -1,3 +1,5 @@
+//! The internals of the Keccak permutation function
+
 use std::ops::BitXor;
 
 use crate::state::{State, Sheet, to_state, from_state, Modulus};

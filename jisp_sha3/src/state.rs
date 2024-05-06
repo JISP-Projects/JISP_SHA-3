@@ -1,6 +1,5 @@
+//! The internal state in the keccak algorithm
 use std::ops::{Index, IndexMut, BitXor};
-
-//idea: use i64 for indexing and add a mod operation on top of i64;
 
 /// Turns a string of `u64` words into a state matrix
 /// 

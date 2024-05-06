@@ -1,24 +1,30 @@
+//! A collection of functions used for message encoding and padding
 
-
-pub fn string_to_encoding(s: &str) -> Vec<u8> {
-    s.as_bytes().into()
-}
-
+/// flips each individual byte in a vector from little endian ordering to big endian ordering or vice versa
 pub fn flip_ordering(v: &Vec<u8>) -> Vec<u8> {
     v.iter().map(|u| u.reverse_bits()).collect()
 }
 
-pub fn le_preprocessing(s: &str) -> Vec<[u64; 25]> {
-    let bytes = string_to_encoding(s);
-    let bytes = flip_ordering(&bytes);
-    padding(&bytes, &vec![true,false])
+/// encodes a string into bytes using little endian byte encoding
+pub fn le_encoding(s: &str) -> Vec<u8> {
+    let bytes = be_encoding(s);
+    flip_ordering(&bytes)
 }
 
-pub fn be_preprocessing(s: &str) -> Vec<[u64; 25]> {
-    let bytes = string_to_encoding(s);
-    padding(&bytes, &vec![true,false])
+/// encodes a string into bytes using big endian byte encoding
+pub fn be_encoding(s: &str) ->Vec<u8>{
+    s.as_bytes().into()
 }
 
+/// Splits `u64` words into `u8` bytes. Used internally to transform words in a state back into bytes
+/// # Examples
+/// ```
+/// use jisp_sha3::preprocessing::split_bytes;
+/// let words = vec![0x0102_0304_0506_0708];
+/// let bytes = split_bytes(&words);
+/// 
+/// assert_eq!(bytes, vec![1, 2, 3, 4, 5, 6, 7, 8]);
+/// ```
 pub fn split_bytes(v:&Vec<u64>) -> Vec<u8> {
     let mut res = Vec::new();
     for word in v {
@@ -35,7 +41,7 @@ pub fn split_bytes(v:&Vec<u64>) -> Vec<u8> {
     return res;
 }
 
-/// Pads a string of bytes and splits it in the specified block-size.
+/// Pads a string of bytes and splits it in the specified block-size. Used internally in the [SHA-3](crate::sha3) functions
 /// 
 /// # Panics
 /// If the suffix is longer than 6 bits. Note that it is a maximum of 4 bits in the 
