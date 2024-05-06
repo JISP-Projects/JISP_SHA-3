@@ -2,7 +2,7 @@
 #![allow(non_snake_case)]
 use std::ops::BitXor;
 
-use crate::state::{State, Sheet, to_state, from_state, Modulus};
+use crate::internals::state::{State, Sheet, to_state, from_state, Modulus};
 
 pub fn keccak(str_state:[u64;25], rounds:i64) -> [u64;25] {
     let mut state = to_state(&str_state.to_vec());
