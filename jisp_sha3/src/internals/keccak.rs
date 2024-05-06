@@ -1,9 +1,8 @@
 //! The internals of the Keccak permutation function
-
+#![allow(non_snake_case)]
 use std::ops::BitXor;
 
 use crate::state::{State, Sheet, to_state, from_state, Modulus};
-use crate::preprocessing::{split_bytes,flip_ordering};
 
 pub fn keccak(str_state:[u64;25], rounds:i64) -> [u64;25] {
     let mut state = to_state(&str_state.to_vec());
@@ -157,47 +156,9 @@ fn modulus(x:i64, m:u8) -> u8 {
     return x as u8;
 }
 
-
-pub fn print_state(s:String, state:&State) {
-    print_state_string(s,&from_state(state));
-}
-
-pub fn print_state_string(s:String, state:&[u64]) {
-    print_state_u8(s, &split_bytes(&state.to_vec()));
-    
-}
-
-pub fn print_state_u8(s:String, state:&Vec<u8>) {
-    let v = flip_ordering(state);
-    print!("{}: [\n", s);
-    for elem in v {
-        print!("{:02x?}, ", elem);
-    }
-    println!("];");
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn theta_basic() {
-        let mut v = vec![0u64;18];
-        v[0] = 0b0110 << 60;
-        v[17] = 1;
-        let mut state = to_state(&v);
-        state = theta(state);
-        print_state(format!("theta"), &state);
-        state = rho(state);
-        print_state(format!("rho"), &state);
-        state = pi(state);
-        print_state(format!("pi"), &state);
-        state = chi(state);
-        print_state(format!("chi"), &state);
-        state = iota(state, 0);
-        print_state(format!("iota"), &state);
-        assert_eq!(state.0[0].0[0].0, 0);
-    }
 
     #[test]
     fn rc_test() {

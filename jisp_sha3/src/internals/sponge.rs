@@ -1,6 +1,6 @@
 //! The internals of SHA-3 with freely adjustable parameters. Only use if you know what you are doing
 
-use crate::internals::keccak::{keccak, print_state_string};
+use crate::internals::keccak::keccak;
 use crate::preprocessing::{padding, split_bytes};
 
 
@@ -11,18 +11,12 @@ pub fn keccak_c<const RATE:usize>(m:&Vec<u8>, suffix:&Vec<bool>, output:usize) -
     //absorb blocks
     let mut state = [0u64; 25];
 
-    let mut k = 0;
     for block in blocks {
         //absorption
         for i in 0..RATE {
             state[i] ^= block[i];
         }
-        print_state_string(format!("Xor'd: {}", k), &state);
         state = keccak(state, rounds);
-
-        //print for keeping progress
-        k += 1;
-        print_state_string(format!("Permuted: {}", k), &state);
     }
 
 
@@ -49,44 +43,4 @@ pub fn keccak_c<const RATE:usize>(m:&Vec<u8>, suffix:&Vec<bool>, output:usize) -
     }
 
     return result;
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::internals::keccak::print_state_u8;
-
-    use super::*;
-
-    #[test]
-    fn keccak_224() {
- 
-        let m = vec![];
-        let suffix = vec![false, true];
-        let res = keccak_c::<18>(&m, &suffix, 224);
- 
-        print_state_u8("Hash".to_owned(), &res);
-        assert_eq!(res, vec![]);
-    }
-
-    #[test]
-    fn keccak_224_heavy() {
- 
-        let m = vec![0xc5u8; 200];
-        let suffix = vec![false, true];
-        let res = keccak_c::<18>(&m, &suffix, 224);
- 
-        print_state_u8("Hash".to_owned(), &res);
-        assert_eq!(res, vec![]);
-    }
-
-    #[test]
-    fn keccak_512() {
- 
-        let m = vec![];
-        let suffix = vec![false, true];
-        let res = keccak_c::<9>(&m, &suffix, 512);
- 
-        print_state_u8("Hash".to_owned(), &res);
-        assert_eq!(res, vec![]);
-    }
 }
