@@ -4,7 +4,7 @@ This crate is my pure-rust implementation of SHA-3, this implementation is just 
 
 # Running the simple GUI
 For demonstration purposes I have also made a simple User Interface in this [project](https://github.com/JISP-Projects/JISP_SHA-3)
-<img src="https://github.com/JISP-Projects/JISP_SHA-3/raw/master/images/SHA-3.png" width="100%">
+<img src="https://raw.githubusercontent.com/JISP-Projects/JISP_SHA-3/master/images/SHA-3.png" width="100%">
 
 If you want to use this interface yourself you need to have the rust compiler [Cargo](https://www.rust-lang.org/tools/install) installed.
 
