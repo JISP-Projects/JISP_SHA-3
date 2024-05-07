@@ -10,7 +10,7 @@ use std::ops::{Index, IndexMut, BitXor};
 /// # Examples
 /// 
 /// ```
-/// use jisp_sha3::state::to_state;
+/// use jisp_sha3::internals::state::to_state;
 /// 
 /// let v = vec![0,0,0,0,1,2];
 /// let state = to_state(&v);
@@ -39,7 +39,7 @@ pub fn to_state(v:&Vec<u64>) -> State {
 /// 
 /// # Examples
 /// ```
-/// use jisp_sha3::state::{to_state, from_state};
+/// use jisp_sha3::internals::state::{to_state, from_state};
 /// 
 /// let mut v = [0;25];
 /// v[4] = 1;
