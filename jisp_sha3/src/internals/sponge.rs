@@ -4,7 +4,7 @@ use crate::internals::keccak::keccak;
 use crate::preprocessing::{padding, split_bytes};
 
 
-/// Performs the keccak[c] algorithm and provides an output of `output` bits long
+/// Performs the keccak\[c\] algorithm and provides an output of `output` bits long
 pub fn keccak_c<const RATE:usize>(m:&Vec<u8>, suffix:&Vec<bool>, output:usize) -> Vec<u8> {
     let blocks = padding::<RATE>(m, suffix);
     let rounds = 24; //rounds per block
