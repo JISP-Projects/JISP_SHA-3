@@ -1,10 +1,11 @@
 [package]
 name = "jisp_sha3"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 documentation = "https://docs.rs/jisp_sha3/"
 description = "A pure-rust implementation of the SHA-3 algorithm and its variations, for a personal project"
 license = "MIT"
+keywords = ["SHA-3", "cryptography", "crypto", "hash", "hash functions"]
 repository = "https://github.com/JISP-Projects/JISP_SHA-3"
 readme = "../README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
