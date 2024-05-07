@@ -8,7 +8,7 @@
 //! # Usage
 //! To perform one of the hashing algorithm variations on your data you first need to parse it into a vector of `u8` bytes. 
 //! You can then simply call one of the functions in [sha3] on your data.
-//! Note that a lot of 
+//! Note that the standard for SHA-3 is to use little endian encoding. You can swap your data to a different encoding scheme using the functions in [preprocessing]
 //! 
 //! # Example
 //! ```
