@@ -10,7 +10,7 @@ use sha::printer::{print_bytes_be, print_bytes_le};
 fn main() {
     let mut native_options = eframe::NativeOptions::default();
     let _ = native_options.viewport.inner_size.insert((660., 480.).into());
-    let _ = eframe::run_native("SHA-2", native_options, Box::new(|cc| Box::new(ShaGUI::new(cc))))
+    let _ = eframe::run_native("SHA-3", native_options, Box::new(|cc| Box::new(ShaGUI::new(cc))))
         .expect("Unexpected Error");
 }
 
@@ -158,7 +158,9 @@ impl eframe::App for ShaGUI {
 
                 if ALG_ITER[4..].contains(&self.alg_info.alg) {
                     ui.label("\tDigest:");
-                    ui.add(egui::DragValue::new(&mut self.alg_info.digest).clamp_range(64..=usize::MAX).speed(16).min_decimals(1));
+                    if ui.add(egui::DragValue::new(&mut self.alg_info.digest).clamp_range(64..=usize::MAX).speed(16)).changed() {
+                        self.alg_info.digest = (self.alg_info.digest / 64)*64
+                    }
                 }
             });
             
